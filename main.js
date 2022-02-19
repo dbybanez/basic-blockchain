@@ -1,10 +1,17 @@
 const SHA256 = require('crypto-js/sha256')
 
+class Transaction {
+  constructor(fromAddress, toAddress, amount) {
+    this.fromAddress = fromAddress
+    this.toAddress = toAddress
+    this.amount = amount
+  }
+}
+
 class Block {
-  constructor(index, timestamp, data, previousHash = '') {
-    this.index = index
+  constructor(timestamp, transactions, previousHash = '') {
     this.timestamp = timestamp
-    this.data = data
+    this.transactions = transactions
     this.previousHash = previousHash
     this.hash = this.calculateHash()
     this.nonce = 0
@@ -33,21 +40,35 @@ class Block {
 class Blockchain {
   constructor() {
     this.chain = [this.createGenesisBlock()]
-    this.difficulty = 4
+    this.difficulty = 2
+    this.pendingTransactions = []
+    this.miningReward = 100
   }
 
   createGenesisBlock() {
-    return new Block(0, '2/19/2022', 'Genesis block', '0')
+    return new Block('2/19/2022', 'Genesis block', '0')
   }
 
   getLatestBlock() {
     return this.chain[this.chain.length - 1]
   }
 
-  addBlock(newBlock) {
-    newBlock.previousHash = this.getLatestBlock().hash
-    newBlock.mineBlock(this.difficulty)
-    this.chain.push(newBlock)
+  // addBlock(newBlock) {
+  //   newBlock.previousHash = this.getLatestBlock().hash
+  //   newBlock.mineBlock(this.difficulty)
+  //   this.chain.push(newBlock)
+  // }
+
+  minePendingTransactions(miningRewardAddress) {
+    let block = new Block(Date.now(), this.pendingTransactions)
+    block.mineBlock(this.difficulty)
+
+    console.log('Block sucessfully mined!')
+    this.chain.push(block)
+
+    this.pendingTransactions = [
+      new Transaction(null, miningRewardAddress, this.miningReward)
+    ]
   }
 
   isChainValid() {
@@ -73,22 +94,4 @@ class Blockchain {
 let coin = new Blockchain()
 
 console.log('Mining block 1...' )
-
-coin.addBlock(
-  new Block(
-    1, 
-    '2/19/2022',
-    { amount: 6 }
-  )
-)
-
-console.log('Mining block 2...' )
-
-coin.addBlock(
-  new Block(
-    2, 
-    '2/21/2022',
-    { amount: 24 }
-  )
-)
 
