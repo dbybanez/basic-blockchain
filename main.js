@@ -6,7 +6,7 @@ class Block {
     this.timestamp = timestamp
     this.data = data
     this.previousHash = previousHash
-    this.hash = ''
+    this.hash = this.calculateHash()
   }
 
   calculateHash() {
@@ -16,5 +16,15 @@ class Block {
       this.timestamp +
       JSON.stringify(this.data)
     ).toString()
+  }
+}
+
+class Blockchain {
+  constructor() {
+    this.chain = [this.createGenesisBlock()]
+  }
+
+  createGenesisBlock() {
+    return new Block(0, '2/19/2022', 'Genesis block', '0')
   }
 }
