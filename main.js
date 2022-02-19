@@ -77,4 +77,8 @@ coin.addBlock(
 
 console.log ('Is blockchain valid? ' + coin.isChainValid())
 
+coin.chain[1].data = { amount: 100 }
+
+console.log ('Is blockchain valid? ' + coin.isChainValid())
+
 // console.log(JSON.stringify(coin, null, 4))
