@@ -1,3 +1,5 @@
+const SHA256 = require('crypto-js/sha256')
+
 class Block {
   constructor(index, timestamp, data, previousHash = '') {
     this.index = index
@@ -8,6 +10,11 @@ class Block {
   }
 
   calculateHash() {
-    
+    return SHA256(
+      this.index +
+      this.previousHash +
+      this.timestamp +
+      JSON.stringify(this.data)
+    ).toString()
   }
 }
