@@ -34,7 +34,28 @@ class Blockchain {
 
   addBlock(newBlock) {
     newBlock.previousHash = this.getLatestBlock().hash
-    newBlock.hash = newBlock.calculateHash
+    newBlock.hash = newBlock.calculateHash()
     this.chain.push(newBlock)
   }
 }
+
+var today = new Date();
+// (today.getMonth()+1) + '/' + today.getDate() + '/' + today.getFullYear()
+
+let coin = new Blockchain()
+coin.addBlock(
+  new Block(
+    1, 
+    '2/19/2022',
+    { amount: 6 }
+  )
+)
+coin.addBlock(
+  new Block(
+    2, 
+    '2/21/2022',
+    { amount: 24 }
+  )
+)
+
+console.log(JSON.stringify(coin, null, 4))
