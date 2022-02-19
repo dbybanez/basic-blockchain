@@ -1,1 +1,1 @@
-# basic-blockchain-js
+# basic-blockchain
