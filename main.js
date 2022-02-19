@@ -33,6 +33,7 @@ class Block {
 class Blockchain {
   constructor() {
     this.chain = [this.createGenesisBlock()]
+    this.difficulty = 4
   }
 
   createGenesisBlock() {
@@ -45,7 +46,7 @@ class Blockchain {
 
   addBlock(newBlock) {
     newBlock.previousHash = this.getLatestBlock().hash
-    // newBlock.hash = newBlock.calculateHash()
+    newBlock.mineBlock(this.difficulty)
     this.chain.push(newBlock)
   }
 
@@ -66,10 +67,13 @@ class Blockchain {
   }
 }
 
-var today = new Date();
+// var today = new Date();
 // (today.getMonth()+1) + '/' + today.getDate() + '/' + today.getFullYear()
 
 let coin = new Blockchain()
+
+console.log('Mining block 1...' )
+
 coin.addBlock(
   new Block(
     1, 
@@ -77,6 +81,9 @@ coin.addBlock(
     { amount: 6 }
   )
 )
+
+console.log('Mining block 2...' )
+
 coin.addBlock(
   new Block(
     2, 
@@ -85,11 +92,3 @@ coin.addBlock(
   )
 )
 
-console.log ('Is blockchain valid? ' + coin.isChainValid())
-
-coin.chain[1].data = { amount: 100 }
-coin.chain[1].hash = coin.chain[1].calculateHash()
-
-console.log ('Is blockchain valid? ' + coin.isChainValid())
-
-// console.log(JSON.stringify(coin, null, 4))
