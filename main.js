@@ -27,4 +27,14 @@ class Blockchain {
   createGenesisBlock() {
     return new Block(0, '2/19/2022', 'Genesis block', '0')
   }
+
+  getLatestBlock() {
+    return this.chain[this.chain.length - 1]
+  }
+
+  addBlock(newBlock) {
+    newBlock.previousHash = this.getLatestBlock().hash
+    newBlock.hash = newBlock.calculateHash
+    this.chain.push(newBlock)
+  }
 }
