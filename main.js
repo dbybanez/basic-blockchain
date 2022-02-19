@@ -7,6 +7,7 @@ class Block {
     this.data = data
     this.previousHash = previousHash
     this.hash = this.calculateHash()
+    this.nonce = 0
   }
 
   calculateHash() {
@@ -14,8 +15,18 @@ class Block {
       this.index +
       this.previousHash +
       this.timestamp +
-      JSON.stringify(this.data)
+      JSON.stringify(this.data) +
+      this.nonce
     ).toString()
+  }
+
+  mineBlock(difficulty) {
+    while(this.hash.substring(0, difficulty) !== Array(difficulty + 1).join('0')) {
+      this.nonce++
+      this.hash = this.calculateHash()
+    }
+
+    console.log('Block mined: ' + this.hash)
   }
 }
 
@@ -34,7 +45,7 @@ class Blockchain {
 
   addBlock(newBlock) {
     newBlock.previousHash = this.getLatestBlock().hash
-    newBlock.hash = newBlock.calculateHash()
+    // newBlock.hash = newBlock.calculateHash()
     this.chain.push(newBlock)
   }
 
@@ -51,7 +62,6 @@ class Blockchain {
         return false
       }
     }
-
     return true
   }
 }
@@ -78,6 +88,7 @@ coin.addBlock(
 console.log ('Is blockchain valid? ' + coin.isChainValid())
 
 coin.chain[1].data = { amount: 100 }
+coin.chain[1].hash = coin.chain[1].calculateHash()
 
 console.log ('Is blockchain valid? ' + coin.isChainValid())
 
